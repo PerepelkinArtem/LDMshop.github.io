@@ -37,6 +37,7 @@ body {
     list-style-type: none;
     li {
       display: flex;
+      align-items: center;
     }
   }
 
@@ -46,14 +47,25 @@ body {
   }
 
   .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     margin: 10px;
     border: 1px solid #f3f3f3;
     padding: 10px;
     width: 210px;
-    border-radius: 40px;
+    border-radius: 20px;
     padding: 0 auto;
-    img {
-      margin: 10px auto;
+    span {
+      padding-right: 10px;
+    }
+    p {
+      text-align: center;
+    }
+    .card-status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
