@@ -8,9 +8,6 @@
   width: 210px;
   border-radius: 20px;
   padding: 0 auto;
-  span {
-    padding-right: 10px;
-  }
   p {
     text-align: center;
   }
@@ -25,12 +22,13 @@
     cursor: pointer;
   }
 
-  .card-status {
+  .cardStatus {
+    margin: 10px 0;
     display: flex;
+    align-self: center;
     align-items: center;
-    justify-content: center;
     b {
-      margin-right: 10px;
+      margin: 0 10px;
     }
   }
 }

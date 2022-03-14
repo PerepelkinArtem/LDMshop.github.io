@@ -1,4 +1,4 @@
-function Header() {
+function Header(props) {
     return (
         <header>
             <div className="headerLeft">
@@ -9,7 +9,7 @@ function Header() {
             </div>
             <ul className="headerRight">
                 <li>
-                    <img with={20} height={20} src="/img/basket.svg" />
+                    <img onClick={props.onClickDrawer} with={20} height={20} src="/img/basket.svg" />
                     <div>1205 руб.</div>
                     <img with={20} height={20} src="/img/user.svg" />
                 </li>
