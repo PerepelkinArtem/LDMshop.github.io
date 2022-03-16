@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Card from './components/Card';
 import Drawer from './components/Drawer';
 import Header from './components/Header';
@@ -18,10 +19,14 @@ function App() {
   const [drawerOpened, setDrawerOpened] = React.useState(false);
 
   React.useEffect(() => {
-    fetch('https://622072c8ce99a7de1959cf52.mockapi.io/items').then(res => {
-      return res.json();
-    }).then(json => {
-      setItems(json)
+    // два способа получать данные с бека fetch (популярный) и axios (популярный)
+    // fetch('https://622072c8ce99a7de1959cf52.mockapi.io/items').then(res => {
+    //   return res.json();
+    // }).then(json => {
+    //   setItems(json)
+    // });
+    axios.get ('https://622072c8ce99a7de1959cf52.mockapi.io/items').then((res) =>{
+      setItems(res.data);
     });
   }, []);
 
