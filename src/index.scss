@@ -38,12 +38,19 @@ body {
       border: 1px solid #f2f2f2;
       border-radius: 10px;
       padding: 0 15px;
+      position: relative;
 
       input {
         border: 0;
         padding: 10px;
         font-size: 16px;
         width: 200px;
+        outline: none;
+      }
+      .clear-btn {
+        position: absolute;
+        right: 0;
+    
       }
     }
   }

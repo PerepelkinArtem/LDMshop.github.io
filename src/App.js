@@ -14,36 +14,48 @@ import Header from './components/Header';
 function App() {
   const [items, setItems] = React.useState([]);
   const [drawerItems, setDrawerItems] = React.useState([]); // adding to drawer
+  const [searchValue, setSearchValue] = React.useState('');
   const [drawerOpened, setDrawerOpened] = React.useState(false);
 
-React.useEffect ( () => {
-  fetch ('https://622072c8ce99a7de1959cf52.mockapi.io/items').then(res => {
-    return res.json();
-  }).then(json => {
-    setItems(json)
-  });
-}, []);
+  React.useEffect(() => {
+    fetch('https://622072c8ce99a7de1959cf52.mockapi.io/items').then(res => {
+      return res.json();
+    }).then(json => {
+      setItems(json)
+    });
+  }, []);
 
-// Adding the cards in Drawer
-const onAddToDrawer = (obj) => {
-  setDrawerItems([...drawerItems, obj]);
-}
-console.log (drawerItems);
+  // Adding the cards in Drawer - METHOD
+  const onAddToDrawer = (obj) => {
+    setDrawerItems([...drawerItems, obj]);
+  };
+
+  // METHOD for saerch 
+  const onChangeSearchInput = (event) => {
+    setSearchValue(event.target.value);
+  };
+
   return (
     <div className="wrapper">
       {drawerOpened && <Drawer items={drawerItems} onClose={() => setDrawerOpened(false)} />}
       <Header onClickDrawer={() => setDrawerOpened(true)} />
       <div className="content">
         <div className='sub-title_content'>
-          <h3>ВCE АВТОМОБИЛИ</h3>
+          {/* <h3>ВCE АВТОМОБИЛИ</h3> */}
+          <h3>{searchValue ? `Поиск по запросу: "${searchValue}"` : 'Все кроссовки' }</h3>
           <div className="search-block">
             <img src="/img/search.svg" alt="Search" />
-            <input placeholder="Поиск..." />
+            {/* X button on input of search area */}
+            {searchValue && (<img className="clear-btn" onClick={ () => setSearchValue('')} src="/img/drawer/X.svg" alt='Clear' />)}
+            <input onChange={onChangeSearchInput} value={searchValue} placeholder="Поиск..." />
           </div>
         </div>
         <div className="content-card">
-          {items.map((item) => (
+          {items
+          .filter((item) => item.title.toLowerCase().includes(searchValue))
+          .map((item, index) => (
             <Card
+              key={index}
               title={item.title}
               price={item.price}
               imageUrl={item.imageUrl}
