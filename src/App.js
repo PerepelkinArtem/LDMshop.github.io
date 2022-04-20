@@ -3,6 +3,7 @@ import axios from 'axios';
 import Card from './components/Card';
 import Drawer from './components/Drawer';
 import Header from './components/Header';
+import Menu from './components/Menu';
 
 // const arr = [
 //   { title: 'SKODA OCTAVIA A5 2011 1,6 BSE MT', price: 40000, imageUrl: '/img/auto/5.jpg' },
@@ -18,58 +19,89 @@ function App() {
   const [searchValue, setSearchValue] = React.useState('');
   const [drawerOpened, setDrawerOpened] = React.useState(false);
 
+  //----BACKEND--------------------------------------------------------------
   React.useEffect(() => {
-    // два способа получать данные с бека fetch (популярный) и axios (популярный)
+    // два способа получать данные с бека fetch и axios (популярный)
     // fetch('https://622072c8ce99a7de1959cf52.mockapi.io/items').then(res => {
     //   return res.json();
     // }).then(json => {
     //   setItems(json)
     // });
-    axios.get ('https://622072c8ce99a7de1959cf52.mockapi.io/items').then((res) =>{
+    axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/items').then((res) => {
       setItems(res.data);
     });
+    axios.delete('https://622072c8ce99a7de1959cf52.mockapi.io/cartInDrawer').then((res) => {
+      setDrawerItems(res.data);
+    });
   }, []);
+  //----BACKEND--------------------------------------------------------------
 
-  // Adding the cards in Drawer - METHOD
+  //----DRAWER----------------------------------------------------------------
+  // Adding the cards in Drawer - METHOD вызывается при нажатии на плюс
   const onAddToDrawer = (obj) => {
+    // передай по сслыке объект, к. возвращает метод onAddToDrawer.
+    axios.post('https://622072c8ce99a7de1959cf52.mockapi.io/cartInDrawer', obj);
     setDrawerItems([...drawerItems, obj]);
   };
+  //передаем id в метода onRemoveFromDrawer
+  const onRemoveFromDrawer = (id) => {
+    axios.delete(`https://622072c8ce99a7de1959cf52.mockapi.io/cartInDrawer/${id}`);
+    setDrawerItems((prev) => prev.filter((drawerItems) => drawerItems.id !== id));
+  };
+  //----DRAWER----------------------------------------------------------------
 
-  // METHOD for saerch 
+  // METHOD for saerch
   const onChangeSearchInput = (event) => {
     setSearchValue(event.target.value);
   };
 
   return (
     <div className="wrapper">
-      {drawerOpened && <Drawer items={drawerItems} onClose={() => setDrawerOpened(false)} />}
+      {drawerOpened && (
+        <Drawer
+          items={drawerItems}
+          onClose={() => setDrawerOpened(false)}
+          onRemove={onRemoveFromDrawer}
+        />
+      )}
       <Header onClickDrawer={() => setDrawerOpened(true)} />
+      <Menu
+        onClick={(name) => console.log(name)}
+        items={['Косметика', 'Термогружки', 'Ланч-боксы', 'Свечи', 'Бутылки']}
+      />
       <div className="content">
-        <div className='sub-title_content'>
+        <div className="sub-title_content">
           {/* <h3>ВCE АВТОМОБИЛИ</h3> */}
-          <h3>{searchValue ? `Поиск по запросу: "${searchValue}"` : 'Все кроссовки' }</h3>
+          <h3>{searchValue ? `Поиск по запросу: "${searchValue}"` : 'Все товары'}</h3>
           <div className="search-block">
             <img src="/img/search.svg" alt="Search" />
             {/* X button on input of search area */}
-            {searchValue && (<img className="clear-btn" onClick={ () => setSearchValue('')} src="/img/drawer/X.svg" alt='Clear' />)}
+            {searchValue && (
+              <img
+                className="clear-btn"
+                onClick={() => setSearchValue('')}
+                src="/img/drawer/X.svg"
+                alt="Clear"
+              />
+            )}
             <input onChange={onChangeSearchInput} value={searchValue} placeholder="Поиск..." />
           </div>
         </div>
         <div className="content-card">
           {items
-          .filter((item) => item.title.toLowerCase().includes(searchValue))
-          .map((item, index) => (
-            <Card
-              key={index}
-              title={item.title}
-              price={item.price}
-              imageUrl={item.imageUrl}
-              onPlus={(obj) => onAddToDrawer(obj)}
-            />
-          ))}
+            .filter((item) => item.title.toLowerCase().includes(searchValue))
+            .map((item, index) => (
+              <Card
+                key={index}
+                title={item.title}
+                price={item.price}
+                imageUrl={item.imageUrl}
+                onPlus={(obj) => onAddToDrawer(obj)}
+              />
+            ))}
         </div>
       </div>
-    </div >
+    </div>
   );
 }
 

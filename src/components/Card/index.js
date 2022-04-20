@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './Card.module.scss';
 
 function Card({imageUrl, title, price, onPlus}) {
-  const [isAdded, setIsAdded] = useState(false); // по умолчанию false
+  const [isAdded, setIsAdded] = useState(false); 
 
   const onClickPlus = () => {
     onPlus({imageUrl, title, price});
@@ -14,7 +14,7 @@ function Card({imageUrl, title, price, onPlus}) {
       <div className={styles.favorite}>
         {/* <img src="/img/heart-unliked.svg" alt="Unliked" /> */}
       </div>
-      <img src={imageUrl} alt="auto" />
+      <img src={imageUrl} alt="LDM goods" />
       <p>{title}</p>
       <div className={styles.cardStatus}>
         <span>ЦЕНА:</span>
