@@ -16,10 +16,11 @@ import Menu from './components/Menu';
 function App() {
   const [items, setItems] = React.useState([]);
   const [drawerItems, setDrawerItems] = React.useState([]); // adding to drawer
+  const [Favorites, setFavorites] = useState([]); // массив для избранного
   const [searchValue, setSearchValue] = React.useState('');
   const [drawerOpened, setDrawerOpened] = React.useState(false);
 
-  //----BACKEND--------------------------------------------------------------
+  //----BEGINNING OF BACKEND---------------------------------------------------
   React.useEffect(() => {
     // два способа получать данные с бека fetch и axios (популярный)
     // fetch('https://622072c8ce99a7de1959cf52.mockapi.io/items').then(res => {
@@ -30,26 +31,38 @@ function App() {
     axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/items').then((res) => {
       setItems(res.data);
     });
-    axios.delete('https://622072c8ce99a7de1959cf52.mockapi.io/cartInDrawer').then((res) => {
+    axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/cartInDrawer').then((res) => {
       setDrawerItems(res.data);
     });
   }, []);
-  //----BACKEND--------------------------------------------------------------
 
-  //----DRAWER----------------------------------------------------------------
+  //----BEGINNING OF DRAWER---------------------------------------------------
   // Adding the cards in Drawer - METHOD вызывается при нажатии на плюс
   const onAddToDrawer = (obj) => {
     // передай по сслыке объект, к. возвращает метод onAddToDrawer.
     axios.post('https://622072c8ce99a7de1959cf52.mockapi.io/cartInDrawer', obj);
     setDrawerItems([...drawerItems, obj]);
   };
-  //передаем id в метода onRemoveFromDrawer
+  //передаем id в метода onRemoveFromDrawer для удаления
   const onRemoveFromDrawer = (id) => {
     axios.delete(`https://622072c8ce99a7de1959cf52.mockapi.io/cartInDrawer/${id}`);
     setDrawerItems((prev) => prev.filter((drawerItems) => drawerItems.id !== id));
   };
-  //----DRAWER----------------------------------------------------------------
+  //----END OF DRAWER---------------------------------------------------------
 
+
+
+  //----BEGINNING OF FAVORITES-------------------------------------------------
+  const onAddToFavories = (obj) => {
+    //   // передай по сслыке объект, к. возвращает метод onAddToFavorities.
+    axios.post('https://622072c8ce99a7de1959cf52.mockapi.io/favorities', obj);
+    setFavorites((prev) => [...prev,obj]);
+  };
+  //----END OF FAVORITES-----------------------------------------------------
+
+
+
+  //----END OF BACKEND--------------------------------------------------------
   // METHOD for saerch
   const onChangeSearchInput = (event) => {
     setSearchValue(event.target.value);
@@ -96,6 +109,7 @@ function App() {
                 title={item.title}
                 price={item.price}
                 imageUrl={item.imageUrl}
+                onFavorites={(obj) => onAddToFavories(obj)}
                 onPlus={(obj) => onAddToDrawer(obj)}
               />
             ))}
@@ -105,4 +119,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
