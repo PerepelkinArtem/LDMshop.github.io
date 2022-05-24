@@ -29,6 +29,7 @@ body {
   .sub-title_content {
     display: flex;
     justify-content: space-between;
+
     // img {
     //   margin: 0;
     // }
@@ -47,6 +48,7 @@ body {
         width: 200px;
         outline: none;
       }
+
       .clear-btn {
         position: absolute;
         right: 0;
@@ -58,12 +60,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+
     img {
       max-width: 70%;
       height: auto;
       margin-top: 10px;
       border-radius: 10px;
     }
+
     h3 {
       margin: 0;
       text-transform: uppercase;
@@ -73,11 +77,17 @@ body {
 
   .headerRight {
     list-style-type: none;
+
     li {
       display: flex;
       align-items: center;
+
       img {
         cursor: pointer;
+      }
+
+      span {
+        padding-right: 15px;
       }
     }
   }
@@ -96,6 +106,7 @@ body {
     height: 32px;
     width: 32px;
     cursor: pointer;
+
     img {
       margin: 0;
     }
