@@ -11,16 +11,21 @@ function Drawer({ onClose, onRemove, items = [] }) {
       {/* Выбор отображение корзины: пустая или с товарами*/}
       {items.length > 0 ? (
         <div>
-          <div className={styles.goods}>
+          <div>
             {items.map((obj) => (
-              <div>
+              <div className={styles.goods}>
                 <img className={styles.drawerImg} src={obj.imageUrl} alt="product" />
                 <p>{obj.title}</p>
                 <div className={styles.cardInfo}>
                   <span>ЦЕНА:</span>
                   <b>{obj.price} руб.</b>
-                  <button onClick={() => onRemove(obj.id)} className={styles.removeBtn}>
-                    <img src="/img/drawer/X.svg" alt="plus" />
+                  <button onClick={() => onRemove(obj.id)}>
+                    <div class={styles.clbtn2}>
+                      <div>
+                        <div class={styles.leftright}></div>
+                        <div class={styles.rightleft}></div>
+                      </div>
+                    </div>
                   </button>
                 </div>
               </div>

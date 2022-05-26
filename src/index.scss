@@ -17,6 +17,10 @@ body {
   margin: 50px auto;
   padding: 0 30px;
 
+@media (max-width: 1150px) {
+  // width: 100%;
+}
+
   img {
     margin: 10px;
   }
@@ -24,11 +28,19 @@ body {
   header {
     display: flex;
     justify-content: space-between;
+
+    @media (max-width: 450px) {
+      display: inline;
+    }
   }
 
   .sub-title_content {
     display: flex;
     justify-content: space-between;
+
+    @media (max-width: 450px) {
+      display: inline;
+    }
 
     // img {
     //   margin: 0;
@@ -82,6 +94,10 @@ body {
       display: flex;
       align-items: center;
 
+      @media (max-width: 450px) {
+        justify-content: center;
+      }
+
       img {
         cursor: pointer;
       }
@@ -93,10 +109,29 @@ body {
   }
 
   .content-card {
-    display: flex;
-    flex-wrap: wrap;
+    // display: flex;
+    // flex-wrap: wrap;
     // justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 5px;
     max-width: 1080px;
+    padding-top: 15px;
+    place-content: center;
+
+    @media (max-width: 1150px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 800px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 500px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
   }
 
   .button {
