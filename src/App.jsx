@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Route, Routes } from "react-router-dom";
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux'
+import { decrement, increment } from './redux/slices/filterSlice'
 
 import Drawer from './components/Drawer';
 import Header from './components/Header';
@@ -9,6 +11,9 @@ import Favorites from './pages/Favorites';
 import NoMatchRoute from './pages/NoMatchRoute';
 
 function App() {
+  const count = useSelector((state) => state.counter.value)
+  const dispatch = useDispatch()
+
   const [drawerItems, setDrawerItems] = React.useState([]); // adding to drawer
   const [drawerOpened, setDrawerOpened] = React.useState(false);
 
@@ -39,29 +44,49 @@ function App() {
 
 
 
- 
+
   //----END OF BACKEND--------------------------------------------------------
 
   return (
-    <div className="wrapper">
-      {drawerOpened && (
-        <Drawer
-          items={drawerItems}
-          onClose={() => setDrawerOpened(false)}
-          onRemove={onRemoveFromDrawer}
-        />
-      )}
-      <Header onClickDrawer={() => setDrawerOpened(true)} />
-      <Routes>
-        <Route path='/'element={<Home />} />
+    <>
+      <div>
+        <div>
+          <button
+            aria-label="Increment value"
+            onClick={() => dispatch(increment())}
+          >
+            Increment
+          </button>
+          <span>{count}</span>
+          <button
+            aria-label="Decrement value"
+            onClick={() => dispatch(decrement())}
+          >
+            Decrement
+          </button>
+        </div>
+      </div>
 
-        {/* <Route path='/favorites' element={
+      <div className="wrapper">
+        {drawerOpened && (
+          <Drawer
+            items={drawerItems}
+            onClose={() => setDrawerOpened(false)}
+            onRemove={onRemoveFromDrawer}
+          />
+        )}
+        <Header onClickDrawer={() => setDrawerOpened(true)} />
+        <Routes>
+          <Route path='/' element={<Home />} />
+
+          {/* <Route path='/favorites' element={
           <Favorites
             items={favorites} />} /> */}
 
-        <Route path='*' element={<NoMatchRoute />} />
-      </Routes>
-    </div>
+          <Route path='*' element={<NoMatchRoute />} />
+        </Routes>
+      </div>
+    </>
   );
 }
 
