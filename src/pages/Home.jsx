@@ -1,11 +1,17 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux'
 
 import Card from '../components/Card';
 import Menu from '../components/Menu';
 import SkeletonCard from '../components/Card/SkeletonCard';
 
-function Home () {
+function Home() {
+  const categoryId = useSelector((state) => state.filter.categoryId);
+
+  console.log('redux state', categoryId);
+
+  const setCategoryID = () => { };
 
   const [items, setItems] = React.useState([]);
   const [searchValue, setSearchValue] = React.useState('');
@@ -49,12 +55,16 @@ function Home () {
     setSearchValue(event.target.value);
   };
 
+  const onChangeMenu = (id) => {
+    console.log(id);
+  }
 
   return (
     <>
       <Menu
-        onClick={(name) => console.log(name)}
-        items={['Косметика', 'Термогружки', 'Ланч-боксы', 'Свечи', 'Бутылки']}
+        onClick={ () => console.log(items)}
+        items={['Все', 'Косметика', 'Термогружки', 'Ланч-боксы', 'Свечи', 'Бутылки']}
+        onChangeMenu={onChangeMenu}
       />
       <div className="content">
         <div className="sub-title_content">
@@ -73,6 +83,7 @@ function Home () {
           </div>
         </div>
         <div className="content-card">
+          {/* Логика загрузки скелетона: */}
           {isLoading
             ? [... new Array(9)].map((_, index) => <SkeletonCard key={index} />)
             : items
@@ -84,7 +95,7 @@ function Home () {
                   price={item.price}
                   imageUrl={item.imageUrl}
                   onFavorites={(obj) => onAddToFavories(obj)}
-                  // onPlus={(obj) => onAddToDrawer(obj)}
+                // onPlus={(obj) => onAddToDrawer(obj)}
                 />
               ))
           }

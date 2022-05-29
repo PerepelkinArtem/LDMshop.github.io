@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './Menu.module.scss';
 
-function Menu({ items, onClick }) {
+function Menu({ items, onClick, onChangeMenu }) {
   const [activeItem, setActiveItem] = React.useState([]);
 
   return (
@@ -10,7 +10,8 @@ function Menu({ items, onClick }) {
         {items.map((name, index) => (
           <li
             className={activeItem === index ? styles.active : ''}
-            onClick={() => setActiveItem(index)}
+            onClick={ onClick }
+            // onChangeMenu={console.log()}
             key={`${name}_${index}`}>
             {name}
           </li>
@@ -21,3 +22,5 @@ function Menu({ items, onClick }) {
 }
 
 export default Menu;
+
+// () => setActiveItem(index)
