@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react'
+import axios from 'axios'
 import { useSelector } from 'react-redux'
 
-import Card from '../components/Card';
-import Menu from '../components/Menu';
-import SkeletonCard from '../components/Card/SkeletonCard';
+import Card from '../components/Card'
+import Menu from '../components/Menu'
+import Search from '../components/Search'
+import SkeletonCard from '../components/Card/SkeletonCard'
 
-function Home() {
+function Home(onAddToFavories, onAddToDrawer) {
+
   const categoryId = useSelector((state) => state.filter.categoryId);
 
   console.log('redux state', categoryId);
@@ -14,9 +16,9 @@ function Home() {
   const setCategoryID = () => { };
 
   const [items, setItems] = React.useState([]);
-  const [searchValue, setSearchValue] = React.useState('');
+
   const [isLoading, setIsLoading] = React.useState(true); // для SkeletonCard
-  const [favorites, setFavorites] = useState([]); // массив для избранного
+
 
 
   //----BEGINNING OF BACKEND REQUEST------------------------------------------------
@@ -34,26 +36,11 @@ function Home() {
       setItems(res.data);
       setIsLoading(false); // для SkeletonCard
     });
-    // Избранное: 
-    axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/favorities').then((res) => {
-      setFavorites(res.data);
-    });
+
   }, []);
 
-  //----BEGINNING OF FAVORITES-------------------------------------------------
-  const onAddToFavories = (obj) => {
-    //   // передай по сслыке объект, к. возвращает метод onAddToFavorities.
-    axios.post('https://622072c8ce99a7de1959cf52.mockapi.io/favorities', obj);
-    setFavorites((prev) => [...prev, obj]);
-  };
-  //----END OF FAVORITES-----------------------------------------------------
 
   //----END OF BACKEND REQUEST-------------------------------------------------------
-
-  // METHOD for search feature
-  const onChangeSearchInput = (event) => {
-    setSearchValue(event.target.value);
-  };
 
   const onChangeMenu = (id) => {
     console.log(id);
@@ -62,44 +49,31 @@ function Home() {
   return (
     <>
       <Menu
-        onClick={ () => console.log(items)}
-        items={['Все', 'Косметика', 'Термогружки', 'Ланч-боксы', 'Свечи', 'Бутылки']}
+        onClick={() => console.log(items)}
+        items={['Косметика', 'Термогружки', 'Ланч-боксы', 'Свечи', 'Бутылки']}
         onChangeMenu={onChangeMenu}
       />
       <div className="content">
-        <div className="sub-title_content">
-          <h3>{searchValue ? `Поиск по запросу: "${searchValue}"` : 'Все товары'}</h3>
-          <div className="search-block">
-            <img src="/img/search.svg" alt="Search" />
-            {searchValue && (
-              <img
-                className="clear-btn"
-                onClick={() => setSearchValue('')}
-                src="/img/drawer/X.svg"
-                alt="Clear"
+        <Search />
+      </div>
+      <div className="content-card">
+        {/* Логика загрузки скелетона: */}
+        {isLoading
+          ? [... new Array(9)].map((_, index) => <SkeletonCard key={index} />)
+          : items
+            // .filter((item) => item.title.toLowerCase().includes(searchValue))
+            .map((item, index) => (
+              <Card
+                key={index}
+                title={item.title}
+                price={item.price}
+                imageUrl={item.imageUrl}
+                onAddToDrawer={(obj) => onAddToDrawer(obj)}
+                onFavorites={(obj) => onAddToFavories(obj)}
+              // onPlus={(obj) => onAddToDrawer(obj)}
               />
-            )}
-            <input onChange={onChangeSearchInput} value={searchValue} placeholder="Поиск..." />
-          </div>
-        </div>
-        <div className="content-card">
-          {/* Логика загрузки скелетона: */}
-          {isLoading
-            ? [... new Array(9)].map((_, index) => <SkeletonCard key={index} />)
-            : items
-              // .filter((item) => item.title.toLowerCase().includes(searchValue))
-              .map((item, index) => (
-                <Card
-                  key={index}
-                  title={item.title}
-                  price={item.price}
-                  imageUrl={item.imageUrl}
-                  onFavorites={(obj) => onAddToFavories(obj)}
-                // onPlus={(obj) => onAddToDrawer(obj)}
-                />
-              ))
-          }
-        </div>
+            ))
+        }
       </div>
     </>
   )

@@ -5,16 +5,17 @@ function Favorites(items) {
   return (
     <div className="content-card">
       <h3>Избранное</h3>
-      <div>
+      {/* <div>
         {items.map((item, index) => (
           <Card
             key={index}
-            title={items.title}
-            price={items.price}
-            imageUrl={items.imageUrl}
+            title={item.title}
+            price={item.price}
+            imageUrl={item.imageUrl}
+            favorited={true}
           />
         ))}
-      </div>
+      </div> */}
     </div>
   )
 }

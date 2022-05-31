@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './Drawer.module.scss';
 
 function Drawer({ onClose, onRemove, items = [] }) {
+
   return (
     <div className={styles.drawer}>
       <h3>КОРЗИНА</h3>
