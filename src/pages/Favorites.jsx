@@ -1,11 +1,16 @@
 import React from 'react';
+import { SearchContext } from '../App';
+
 import Card from '../components/Card'
 
 function Favorites(items) {
+
+  const { favorites, setFavorites } = React.useContext(SearchContext);
+
   return (
     <div className="content-card">
       <h3>Избранное</h3>
-      {/* <div>
+      <div>
         {items.map((item, index) => (
           <Card
             key={index}
@@ -15,7 +20,7 @@ function Favorites(items) {
             favorited={true}
           />
         ))}
-      </div> */}
+      </div>
     </div>
   )
 }

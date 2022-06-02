@@ -16,13 +16,14 @@ export const SearchContext = React.createContext('');
 function App() {
   // const count = useSelector((state) => state.counter.value)
   // const dispatch = useDispatch()
+
+  const [items, setItems] = React.useState([]);
   const [searchValue, setSearchValue] = React.useState('');
   const [drawerItems, setDrawerItems] = React.useState([]); // adding to drawer
   const [drawerOpened, setDrawerOpened] = React.useState(false);
-
   const [favorites, setFavorites] = useState([]); // массив для избранного
 
-  //----BEGINNING OF BACKEND---------------------------------------------------
+  //----BEGINNING OF BACKEND
   // useEffect, что рендер списка товаров был один раз, хук следит за этим.
   React.useEffect(() => {
     // Получение информации с BACKEND и помещаем в переменные items, drawersItems, favorites c помощью метоводов setItems, setDrarsItems, setFavorites:
@@ -30,18 +31,20 @@ function App() {
     axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/drawerItems').then((res) => {
       setDrawerItems(res.data);
     });
+
   }, []);
 
 
-  //----BEGINNING OF FAVORITES--------------------------------------------------- 
-  axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/favorities').then((res) => {
-    setFavorites(res.data);
-  });
-  //----END OF FAVORITES--------------------------------------------------------
-  //----BEGINNING OF FAVORITES-------------------------------------------------
-  // const onAddToFavories = (obj) => anyns {
-  //   // передай по сслыке объект, к. возвращает метод onAddToFavorities.
-  //   if (favorites.find((favObj) => favObj.id === obj.id)) {
+  //----BEGINNING OF FAVORITES
+  const onAddToFavories = () => {
+    // axios.post('https://622072c8ce99a7de1959cf52.mockapi.io/favorities', obj);
+    //   setFavorites((prev) => [...prev, obj]);
+    console.log ('click to favotites')
+    };
+
+  //   const onAddToFavories = (obj) => anyns {
+  //     // передай по сслыке объект, к. возвращает метод onAddToFavorities.
+  //     if (favorites.find((favObj) => favObj.id === obj.id)) {
   //     axios.delete(`https://622072c8ce99a7de1959cf52.mockapi.io/favorities/${obj.id}`);
   //     setFavorotes((prev) => prev.filter((item) => item.id !== obj.id));
   //   } else {
@@ -49,10 +52,10 @@ function App() {
   //     setFavorites((prev) => [...prev, obj]);
   //   }
   // };
-  //----END OF FAVORITES-----------------------------------------------------
+  //----END OF FAVORITES
 
 
-  // //----BEGINNING OF DRAWER---------------------------------------------------
+  // //----BEGINNING OF DRAWER
   // Adding the cards in Drawer - METHOD вызывается при нажатии на плюс
   const onAddToDrawer = (obj) => {
     // передай по сслыке объект, к. возвращает метод onAddToDrawer.
@@ -65,17 +68,28 @@ function App() {
     axios.delete(`https://622072c8ce99a7de1959cf52.mockapi.io/cartInDrawer/${id}`);
     setDrawerItems((prev) => prev.filter((drawerItems) => drawerItems.id !== id));
   };
-  //----END OF DRAWER---------------------------------------------------------
-  //----END OF BACKEND--------------------------------------------------------
+  //----END OF DRAWER
+  //----END OF BACKEND
 
   // METHOD for search feature
   const onChangeSearchInput = (event) => {
     setSearchValue(event.target.value);
   };
 
+  // METHOD for Favorite adding
+  // const onClickFavorite = () => {
+  //   onFavorites({imageUrl, title, price});
+  //   setIsFavorite(!isFavorite);
+  // }
+
+  // METHOD for <Menu />
+  const onChangeCategor = (id) => {
+    console.log(id)
+  };
+
   return (
     <div className="wrapper">
-      <SearchContext.Provider value={{ searchValue, setSearchValue, onChangeSearchInput }}>
+      <SearchContext.Provider value={{ items, setItems, onAddToFavories, searchValue, setSearchValue, onChangeSearchInput, favorites, setFavorites }}>
         {drawerOpened && (
           <Drawer
             items={drawerItems}
@@ -87,7 +101,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home onAddToDrawer={onAddToDrawer} />} />
 
-          <Route path='/favorites' element={<Favorites />} />
+          {/* <Route path='/favorites' element={<Favorites />} /> */}
 
           <Route path='*' element={<NoMatchRoute />} />
         </Routes>

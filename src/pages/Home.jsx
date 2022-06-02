@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
+import { SearchContext } from '../App';
 
 import Card from '../components/Card'
 import Menu from '../components/Menu'
@@ -15,10 +16,11 @@ function Home(onAddToFavories, onAddToDrawer) {
 
   const setCategoryID = () => { };
 
-  const [items, setItems] = React.useState([]);
+  
 
   const [isLoading, setIsLoading] = React.useState(true); // для SkeletonCard
 
+  const { items, setItems } = React.useContext(SearchContext);
 
 
   //----BEGINNING OF BACKEND REQUEST------------------------------------------------
@@ -70,6 +72,7 @@ function Home(onAddToFavories, onAddToDrawer) {
                 imageUrl={item.imageUrl}
                 onAddToDrawer={(obj) => onAddToDrawer(obj)}
                 onFavorites={(obj) => onAddToFavories(obj)}
+                
               // onPlus={(obj) => onAddToDrawer(obj)}
               />
             ))
