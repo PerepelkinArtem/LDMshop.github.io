@@ -4,7 +4,7 @@ import styles from './Card.module.scss';
 
 
 
-function Card({ imageUrl, title, price, onPlus, onFavorites, favorited = false, onAddToDrawer }) {
+function Card({ imageUrl, title, price, onPlus, onFavorite, favorited = false }) {
 
   // const { onAddToFavories } = React.useContext(SearchContext);
 
@@ -20,10 +20,12 @@ function Card({ imageUrl, title, price, onPlus, onFavorites, favorited = false, 
 
   // for changing of button plus view
   const onClickPlus = () => {
+    onPlus({imageUrl, title, price})
     setIsAdded(!isAdded);
   }
   // for changing of button favorites view
   const onClickFavorite = () => {
+    onFavorite()
     setIsFavorite(!isFavorite);
   }
 
@@ -38,7 +40,7 @@ function Card({ imageUrl, title, price, onPlus, onFavorites, favorited = false, 
       <div className={styles.cardStatus}>
         <span>ЦЕНА:</span>
         <b>{price} руб.</b>
-        <button className="button" onClick={onClickPlus} onAddToDrawer={onAddToDrawer}>
+        <button className="button" onClick={onClickPlus}>
           <img src={isAdded ? "/img/btn-added.svg" : "/img/plus.svg"} alt="plus" />
         </button>
       </div>

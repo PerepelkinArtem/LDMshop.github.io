@@ -8,7 +8,7 @@ function Header(props) {
         <div className="headerLeft">
           <img with={40} height={40} src="/img/logo.jpg" alt="LOGO" />
           <div>
-            <h3>Магазин ECO товаров</h3>
+            {/* <h3>Магазин ECO товаров</h3> */}
           </div>
         </div>
       </Link>

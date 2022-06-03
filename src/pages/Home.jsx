@@ -8,19 +8,19 @@ import Menu from '../components/Menu'
 import Search from '../components/Search'
 import SkeletonCard from '../components/Card/SkeletonCard'
 
-function Home(onAddToFavories, onAddToDrawer) {
+function Home(onAddToFavories ) {
 
-  const categoryId = useSelector((state) => state.filter.categoryId);
+  // const categoryId = useSelector((state) => state.filter.categoryId);
 
-  console.log('redux state', categoryId);
+  // console.log('redux state', categoryId);
 
-  const setCategoryID = () => { };
+  // const setCategoryID = () => { };
 
-  
+
 
   const [isLoading, setIsLoading] = React.useState(true); // для SkeletonCard
 
-  const { items, setItems } = React.useContext(SearchContext);
+  const { items, setItems, searchValue, drawerItems, setDrawerItems } = React.useContext(SearchContext);
 
 
   //----BEGINNING OF BACKEND REQUEST------------------------------------------------
@@ -42,7 +42,16 @@ function Home(onAddToFavories, onAddToDrawer) {
   }, []);
 
 
-  //----END OF BACKEND REQUEST-------------------------------------------------------
+ //----BEGINNING OF DRAWER
+  // Adding the cards in Drawer - METHOD вызывается при нажатии на плюс
+  const onAddToDrawer = (obj) => {
+  //   // передай по сслыке объект, к. возвращает метод onAddToDrawer.
+  //   // axios.post('https://622072c8ce99a7de1959cf52.mockapi.io/cartInDrawer', obj);
+    setDrawerItems([...drawerItems, obj]);
+    // setDrawerItems((prev) => [...prev, obj]);
+  };
+
+console.log(drawerItems);
 
   const onChangeMenu = (id) => {
     console.log(id);
@@ -63,17 +72,15 @@ function Home(onAddToFavories, onAddToDrawer) {
         {isLoading
           ? [... new Array(9)].map((_, index) => <SkeletonCard key={index} />)
           : items
-            // .filter((item) => item.title.toLowerCase().includes(searchValue))
+            .filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase()))
             .map((item, index) => (
               <Card
                 key={index}
                 title={item.title}
                 price={item.price}
                 imageUrl={item.imageUrl}
-                onAddToDrawer={(obj) => onAddToDrawer(obj)}
-                onFavorites={(obj) => onAddToFavories(obj)}
-                
-              // onPlus={(obj) => onAddToDrawer(obj)}
+                onFavorite={() => console.log('Нажали на избранное')}
+                onPlus={(obj) => onAddToDrawer(obj)}
               />
             ))
         }

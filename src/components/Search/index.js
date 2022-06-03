@@ -5,7 +5,14 @@ import { SearchContext } from '../../App';
 
 function Search() {
 
-    const { searchValue, setSearchValue, onChangeSearchInput } = React.useContext(SearchContext);
+    const { searchValue, setSearchValue } = React.useContext(SearchContext);
+
+
+    // METHOD for search feature
+    const onChangeSearchInput = (event) => {
+        setSearchValue(event.target.value);
+    };
+
 
     return (
         <div className="sub-title_content">

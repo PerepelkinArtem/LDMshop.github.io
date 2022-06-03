@@ -55,13 +55,7 @@ function App() {
   //----END OF FAVORITES
 
 
-  // //----BEGINNING OF DRAWER
-  // Adding the cards in Drawer - METHOD вызывается при нажатии на плюс
-  const onAddToDrawer = (obj) => {
-    // передай по сслыке объект, к. возвращает метод onAddToDrawer.
-    axios.post('https://622072c8ce99a7de1959cf52.mockapi.io/cartInDrawer', obj);
-    setDrawerItems([...drawerItems, obj]);
-  };
+
 
   //передаем id в метода onRemoveFromDrawer для удаления
   const onRemoveFromDrawer = (id) => {
@@ -71,11 +65,7 @@ function App() {
   //----END OF DRAWER
   //----END OF BACKEND
 
-  // METHOD for search feature
-  const onChangeSearchInput = (event) => {
-    setSearchValue(event.target.value);
-  };
-
+  
   // METHOD for Favorite adding
   // const onClickFavorite = () => {
   //   onFavorites({imageUrl, title, price});
@@ -89,7 +79,7 @@ function App() {
 
   return (
     <div className="wrapper">
-      <SearchContext.Provider value={{ items, setItems, onAddToFavories, searchValue, setSearchValue, onChangeSearchInput, favorites, setFavorites }}>
+      <SearchContext.Provider value={{ items, setItems, drawerItems, setDrawerItems, onAddToFavories, searchValue, setSearchValue, favorites, setFavorites }}>
         {drawerOpened && (
           <Drawer
             items={drawerItems}
@@ -99,7 +89,7 @@ function App() {
         )}
         <Header onClickDrawer={() => setDrawerOpened(true)} />
         <Routes>
-          <Route path='/' element={<Home onAddToDrawer={onAddToDrawer} />} />
+          <Route path='/' element={<Home />} />
 
           {/* <Route path='/favorites' element={<Favorites />} /> */}
 
