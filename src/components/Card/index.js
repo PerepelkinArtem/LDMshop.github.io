@@ -2,33 +2,23 @@ import React, { useState } from 'react';
 import styles from './Card.module.scss';
 // import { SearchContext } from '../App';
 
-
-
-function Card({ imageUrl, title, price, onPlus, onFavorite, favorited = false }) {
+function Card({ id, items, cartItems, imageUrl, title, price, onPlus, onFavorite, favorited = false, added = false }) {
 
   // const { onAddToFavories } = React.useContext(SearchContext);
 
-  const [isAdded, setIsAdded] = useState(false);
+  const [isAdded, setIsAdded] = useState(added);
   const [isFavorite, setIsFavorite] = useState(favorited);
-
-
-
-  // const onClickPlus = () => {
-  //   onPlus({imageUrl, title, price});
-  //   setIsAdded(!isAdded);
-  // }
 
   // for changing of button plus view
   const onClickPlus = () => {
-    onPlus({imageUrl, title, price})
+    onPlus({id, imageUrl, title, price})
     setIsAdded(!isAdded);
   }
   // for changing of button favorites view
   const onClickFavorite = () => {
-    onFavorite()
+    onFavorite({id, imageUrl, title, price})
     setIsFavorite(!isFavorite);
   }
-
 
   return (
     <div className={styles.card}>

@@ -22,50 +22,62 @@ function App() {
   const [drawerItems, setDrawerItems] = React.useState([]); // adding to drawer
   const [drawerOpened, setDrawerOpened] = React.useState(false);
   const [favorites, setFavorites] = useState([]); // массив для избранного
+  const [isLoading, setIsLoading] = React.useState(true); // для SkeletonCard
 
-  //----BEGINNING OF BACKEND
-  // useEffect, что рендер списка товаров был один раз, хук следит за этим.
+  // useEffect, чтобы рендер списка товаров был один раз, хук следит за этим.
+  // Получение информации с BACKEND и помещаем в переменные items, drawersItems, favorites c помощью метоводов setItems, setDrarsItems, setFavorites:
   React.useEffect(() => {
-    // Получение информации с BACKEND и помещаем в переменные items, drawersItems, favorites c помощью метоводов setItems, setDrarsItems, setFavorites:
-    //Корзина:
-    axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/drawerItems').then((res) => {
-      setDrawerItems(res.data);
-    });
+    async function fetchData() {
+      const drawerResponce = await axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/drawerItems');
+      const favoritesResponce = await axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/favorities');
+      const itemsResponce = await axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/items');
 
+      
+      setDrawerItems(drawerResponce.data);
+      setFavorites(favoritesResponce.data);
+      setItems(itemsResponce.data);
+      setIsLoading(false); // для SkeletonCard
+    }
+    fetchData();
   }, []);
 
 
-  //----BEGINNING OF FAVORITES
-  const onAddToFavories = () => {
-    // axios.post('https://622072c8ce99a7de1959cf52.mockapi.io/favorities', obj);
-    //   setFavorites((prev) => [...prev, obj]);
-    console.log ('click to favotites')
-    };
-
-  //   const onAddToFavories = (obj) => anyns {
-  //     // передай по сслыке объект, к. возвращает метод onAddToFavorities.
-  //     if (favorites.find((favObj) => favObj.id === obj.id)) {
-  //     axios.delete(`https://622072c8ce99a7de1959cf52.mockapi.io/favorities/${obj.id}`);
-  //     setFavorotes((prev) => prev.filter((item) => item.id !== obj.id));
-  //   } else {
-  //     const { data } = await.axios.post('https://622072c8ce99a7de1959cf52.mockapi.io/favorities', obj);
-  //     setFavorites((prev) => [...prev, obj]);
-  //   }
-  // };
-  //----END OF FAVORITES
-
-
-
-
+  //----mockAPI OF FAVORITES
+  const onAddToFavories = async (obj) => {
+    try {
+      // передай по сслыке объект, к. возвращает метод onAddToFavorities.
+      if (favorites.find((favObj) => favObj.id === obj.id)) {
+        axios.delete(`https://622072c8ce99a7de1959cf52.mockapi.io/favorities/${obj.id}`);
+        setFavorites((prev) => prev.filter((item) => item.id !== obj.id));
+      } else {
+        const { data } = await axios.post('https://622072c8ce99a7de1959cf52.mockapi.io/favorities', obj);
+        setFavorites((prev) => [...prev, data]);
+      }
+    } catch (error) {
+      alert('Не удалось добавить в избранное')
+    }
+  };
+  //----mockAPI OF FAVORITES
+  //----mockAPI OF DRAWER
+  // Adding the cards in Drawer - METHOD вызывается при нажатии на плюс
+  const onAddToDrawer = (obj) => {
+    // передай по сслыке объект, к. возвращает метод onAddToDrawer.
+    if (drawerItems.find((item) => Number(item.id) === Number(obj.id))) {
+      axios.delete(`https://622072c8ce99a7de1959cf52.mockapi.io/drawerItems/${obj.id}`);
+      setDrawerItems((prev) => prev.filter((item) => Number(item.id) === Number(obj.id)));
+    } else {
+      axios.post('https://622072c8ce99a7de1959cf52.mockapi.io/drawerItems', obj);
+      // setDrawerItems([...drawerItems, obj]);
+      setDrawerItems((prev) => [...prev, obj]);
+    }
+  };
   //передаем id в метода onRemoveFromDrawer для удаления
   const onRemoveFromDrawer = (id) => {
-    axios.delete(`https://622072c8ce99a7de1959cf52.mockapi.io/cartInDrawer/${id}`);
+    axios.delete(`https://622072c8ce99a7de1959cf52.mockapi.io/drawerItems/${id}`);
     setDrawerItems((prev) => prev.filter((drawerItems) => drawerItems.id !== id));
   };
-  //----END OF DRAWER
-  //----END OF BACKEND
+  //----mockAPI OF DRAWER
 
-  
   // METHOD for Favorite adding
   // const onClickFavorite = () => {
   //   onFavorites({imageUrl, title, price});
@@ -73,13 +85,13 @@ function App() {
   // }
 
   // METHOD for <Menu />
-  const onChangeCategor = (id) => {
-    console.log(id)
-  };
+  // const onChangeCategor = (id) => {
+  //   console.log(id)
+  // };
 
   return (
     <div className="wrapper">
-      <SearchContext.Provider value={{ items, setItems, drawerItems, setDrawerItems, onAddToFavories, searchValue, setSearchValue, favorites, setFavorites }}>
+      <SearchContext.Provider value={{ items, setItems, isLoading, drawerItems, setDrawerItems, onAddToDrawer, onAddToFavories, searchValue, setSearchValue, favorites, setFavorites }}>
         {drawerOpened && (
           <Drawer
             items={drawerItems}
@@ -91,7 +103,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
 
-          {/* <Route path='/favorites' element={<Favorites />} /> */}
+          <Route path='/favorites' element={<Favorites />} />
 
           <Route path='*' element={<NoMatchRoute />} />
         </Routes>

@@ -3,21 +3,23 @@ import { SearchContext } from '../App';
 
 import Card from '../components/Card'
 
-function Favorites(items) {
+function Favorites() {
 
-  const { favorites, setFavorites } = React.useContext(SearchContext);
+  const { favorites, onAddToFavories } = React.useContext(SearchContext);
 
   return (
     <div className="content-card">
       <h3>Избранное</h3>
       <div>
-        {items.map((item, index) => (
+        {favorites.map((item, index) => (
           <Card
             key={index}
-            title={item.title}
-            price={item.price}
-            imageUrl={item.imageUrl}
+            // title={item.title}
+            // price={item.price}
+            // imageUrl={item.imageUrl}
             favorited={true}
+            onFavorite={onAddToFavories}
+            {...item}
           />
         ))}
       </div>

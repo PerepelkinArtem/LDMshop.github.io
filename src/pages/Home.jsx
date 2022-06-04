@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import axios from 'axios'
-import { useSelector } from 'react-redux'
+import React from 'react'
+// import { useSelector } from 'react-redux'
 import { SearchContext } from '../App';
 
 import Card from '../components/Card'
@@ -8,7 +7,7 @@ import Menu from '../components/Menu'
 import Search from '../components/Search'
 import SkeletonCard from '../components/Card/SkeletonCard'
 
-function Home(onAddToFavories ) {
+function Home() {
 
   // const categoryId = useSelector((state) => state.filter.categoryId);
 
@@ -17,41 +16,7 @@ function Home(onAddToFavories ) {
   // const setCategoryID = () => { };
 
 
-
-  const [isLoading, setIsLoading] = React.useState(true); // для SkeletonCard
-
-  const { items, setItems, searchValue, drawerItems, setDrawerItems } = React.useContext(SearchContext);
-
-
-  //----BEGINNING OF BACKEND REQUEST------------------------------------------------
-  React.useEffect(() => {
-    // два способа получать данные с бека fetch и axios (популярный)
-    // fetch('https://622072c8ce99a7de1959cf52.mockapi.io/items').then(res => {
-    //   return res.json();
-    // }).then(json => {
-    //   setItems(json)
-    // });
-    // Получение информации с BACKEND и помещаем в переменные items, drawersItems, favorites c помощью метоводов setItems, setDrarsItems, setFavorites:
-
-    // Основные карты:
-    axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/items').then((res) => {
-      setItems(res.data);
-      setIsLoading(false); // для SkeletonCard
-    });
-
-  }, []);
-
-
- //----BEGINNING OF DRAWER
-  // Adding the cards in Drawer - METHOD вызывается при нажатии на плюс
-  const onAddToDrawer = (obj) => {
-  //   // передай по сслыке объект, к. возвращает метод onAddToDrawer.
-  //   // axios.post('https://622072c8ce99a7de1959cf52.mockapi.io/cartInDrawer', obj);
-    setDrawerItems([...drawerItems, obj]);
-    // setDrawerItems((prev) => [...prev, obj]);
-  };
-
-console.log(drawerItems);
+  const { items, isLoading, searchValue, drawerItems, onAddToDrawer, onAddToFavories } = React.useContext(SearchContext);
 
   const onChangeMenu = (id) => {
     console.log(id);
@@ -70,17 +35,19 @@ console.log(drawerItems);
       <div className="content-card">
         {/* Логика загрузки скелетона: */}
         {isLoading
-          ? [... new Array(9)].map((_, index) => <SkeletonCard key={index} />)
+          ? [...new Array(9)].map((_, index) => <SkeletonCard key={index} />)
           : items
             .filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase()))
             .map((item, index) => (
               <Card
                 key={index}
-                title={item.title}
-                price={item.price}
-                imageUrl={item.imageUrl}
-                onFavorite={() => console.log('Нажали на избранное')}
+                // title={item.title}
+                // price={item.price}
+                // imageUrl={item.imageUrl}
+                added= {drawerItems.some((obj) => Number(obj.id) === Number(item.id))}
+                onFavorite={(obj) => onAddToFavories(obj)}
                 onPlus={(obj) => onAddToDrawer(obj)}
+                {...item}
               />
             ))
         }
