@@ -6,9 +6,10 @@ function Drawer({ onClose, onRemove, items = [] }) {
 
   return (
     <div className={styles.drawer}>
-      <h3>КОРЗИНА</h3>
-      <a onClick={onClose} href="#" class={styles.close}></a>
-
+      <div className='drawerHeader'>
+        <h3>КОРЗИНА</h3>
+        <a onClick={onClose} href="#" class={styles.close}></a>
+      </div>
       {/* Выбор отображение корзины: пустая или с товарами*/}
       {items.length > 0 ? (
         <div>

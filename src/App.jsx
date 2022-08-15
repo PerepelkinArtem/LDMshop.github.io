@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Route, Routes } from "react-router-dom";
 import axios from 'axios';
-// import { useSelector, useDispatch } from 'react-redux'
-// import { decrement, increment } from './redux/slices/filterSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import { decrement, increment } from './redux/slices/counterSlice.js'
 
 import Drawer from './components/Drawer';
 import Header from './components/Header';
@@ -14,8 +14,8 @@ import NoMatchRoute from './pages/NoMatchRoute';
 export const SearchContext = React.createContext('');
 
 function App() {
-  // const count = useSelector((state) => state.counter.value)
-  // const dispatch = useDispatch()
+  const count = useSelector((state) => state.counter.value)
+  const dispatch = useDispatch()
 
   const [items, setItems] = React.useState([]);
   const [searchValue, setSearchValue] = React.useState('');
@@ -23,23 +23,26 @@ function App() {
   const [drawerOpened, setDrawerOpened] = React.useState(false);
   const [favorites, setFavorites] = useState([]); // массив для избранного
   const [isLoading, setIsLoading] = React.useState(true); // для SkeletonCard
+  const [activeItem, setActiveItem] = React.useState(null); // категории
 
   // useEffect, чтобы рендер списка товаров был один раз, хук следит за этим.
   // Получение информации с BACKEND и помещаем в переменные items, drawersItems, favorites c помощью метоводов setItems, setDrarsItems, setFavorites:
   React.useEffect(() => {
     async function fetchData() {
+      setIsLoading(true);
       const drawerResponce = await axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/drawerItems');
       const favoritesResponce = await axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/favorities');
-      const itemsResponce = await axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/items');
+      const itemsResponce = await axios.get(`https://622072c8ce99a7de1959cf52.mockapi.io/items?category=${activeItem}`);
 
-      
+      //${activeItem>0 ? `categoty=${activeItem}` : ''}
+
       setDrawerItems(drawerResponce.data);
       setFavorites(favoritesResponce.data);
       setItems(itemsResponce.data);
       setIsLoading(false); // для SkeletonCard
     }
     fetchData();
-  }, []);
+  }, [activeItem]);
 
 
   //----mockAPI OF FAVORITES
@@ -90,25 +93,44 @@ function App() {
   // };
 
   return (
-    <div className="wrapper">
-      <SearchContext.Provider value={{ items, setItems, isLoading, drawerItems, setDrawerItems, onAddToDrawer, onAddToFavories, searchValue, setSearchValue, favorites, setFavorites }}>
-        {drawerOpened && (
-          <Drawer
-            items={drawerItems}
-            onClose={() => setDrawerOpened(false)}
-            onRemove={onRemoveFromDrawer}
-          />
-        )}
-        <Header onClickDrawer={() => setDrawerOpened(true)} />
-        <Routes>
-          <Route path='/' element={<Home />} />
+    <>
+      <div>
+        <div>
+          <button
+            aria-label="Increment value"
+            onClick={() => dispatch(increment())}
+          >
+            Increment
+          </button>
+          <span>{count}</span>
+          <button
+            aria-label="Decrement value"
+            onClick={() => dispatch(decrement())}
+          >
+            Decrement
+          </button>
+        </div>
+      </div>
+      <div className="wrapper">
+        <SearchContext.Provider value={{ items, setItems, isLoading, drawerItems, setDrawerItems, onAddToDrawer, onAddToFavories, searchValue, setSearchValue, favorites, setFavorites, activeItem, setActiveItem }}>
+          {drawerOpened && (
+            <Drawer
+              items={drawerItems}
+              onClose={() => setDrawerOpened(false)}
+              onRemove={onRemoveFromDrawer}
+            />
+          )}
+          <Header onClickDrawer={() => setDrawerOpened(true)} />
+          <Routes>
+            <Route path='/' element={<Home />} />
 
-          <Route path='/favorites' element={<Favorites />} />
+            <Route path='/favorites' element={<Favorites />} />
 
-          <Route path='*' element={<NoMatchRoute />} />
-        </Routes>
-      </SearchContext.Provider>
-    </div>
+            <Route path='*' element={<NoMatchRoute />} />
+          </Routes>
+        </SearchContext.Provider>
+      </div>
+    </>
   );
 }
 

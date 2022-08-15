@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './Menu.module.scss';
 
-function Menu({ items, onClick, onChangeMenu }) {
-  const [activeItem, setActiveItem] = React.useState(null);
+function Menu({ items, onClick, onChangeMenu, activeItem, setActiveItem }) {
 
   const onSelectItem = (index) => {
     setActiveItem(index)
