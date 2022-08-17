@@ -32,7 +32,7 @@ function App() {
       setIsLoading(true);
       const drawerResponce = await axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/drawerItems');
       const favoritesResponce = await axios.get('https://622072c8ce99a7de1959cf52.mockapi.io/favorities');
-      const itemsResponce = await axios.get(`https://622072c8ce99a7de1959cf52.mockapi.io/items?category=${activeItem}`);
+      const itemsResponce = await axios.get(`https://622072c8ce99a7de1959cf52.mockapi.io/items?category=${activeItem > 0 ? `${activeItem}` : ''}`);
 
       //${activeItem>0 ? `categoty=${activeItem}` : ''}
 
