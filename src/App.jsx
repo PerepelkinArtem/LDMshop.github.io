@@ -23,7 +23,7 @@ function App() {
   const [drawerOpened, setDrawerOpened] = React.useState(false);
   const [favorites, setFavorites] = useState([]); // массив для избранного
   const [isLoading, setIsLoading] = React.useState(true); // для SkeletonCard
-  const [activeItem, setActiveItem] = React.useState(null); // категории
+  const [activeItem, setActiveItem] = React.useState(0); // категории
 
   // useEffect, чтобы рендер списка товаров был один раз, хук следит за этим.
   // Получение информации с BACKEND и помещаем в переменные items, drawersItems, favorites c помощью метоводов setItems, setDrarsItems, setFavorites:
@@ -44,11 +44,10 @@ function App() {
     fetchData();
   }, [activeItem]);
 
-
   //----mockAPI OF FAVORITES
   const onAddToFavories = async (obj) => {
     try {
-      // передай по сслыке объект, к. возвращает метод onAddToFavorities.
+      // передай по сслыке объект,  . возвращает метод onAddToFavorities.
       if (favorites.find((favObj) => favObj.id === obj.id)) {
         axios.delete(`https://622072c8ce99a7de1959cf52.mockapi.io/favorities/${obj.id}`);
         setFavorites((prev) => prev.filter((item) => item.id !== obj.id));

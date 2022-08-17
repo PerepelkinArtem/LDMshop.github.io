@@ -18,15 +18,12 @@ function Home() {
 
   const { items, isLoading, searchValue, drawerItems, onAddToDrawer, onAddToFavories, activeItem, setActiveItem } = React.useContext(SearchContext);
 
-  const onChangeMenu = (id) => {
-    alert(id);
-  }
-
   return (
     <>
       <Menu
-        items={['Косметика', 'Термогружки', 'Ланч-боксы', 'Свечи', 'Бутылки']}
-        onChangeMenu={onChangeMenu}
+        items={['Все', 'Косметика', 'Термогружки', 'Ланч-боксы', 'Свечи', 'Бутылки']}
+        onChangeMenu={(id) => alert(id)}
+        onClickCategory={(i) => setActiveItem(i)}
         activeItem={ activeItem }
         setActiveItem={setActiveItem}
       />
