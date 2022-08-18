@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './Menu.module.scss';
+import activeItem from '../../redux/slices/filterSlice'
 
-function Menu({ items, onClickCategory, activeItem, setActiveItem }) {
-
+function Menu({ items, onClickCategory}) {
   return (
     <div className={styles.categories}>
       <ul>

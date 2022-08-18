@@ -9,22 +9,16 @@ import SkeletonCard from '../components/Card/SkeletonCard'
 
 function Home() {
 
-  // const categoryId = useSelector((state) => state.filter.categoryId);
-
-  // console.log('redux state', categoryId);
-
-  // const setCategoryID = () => { };
-
-
-  const { items, isLoading, searchValue, drawerItems, onAddToDrawer, onAddToFavories, activeItem, setActiveItem } = React.useContext(SearchContext);
+  const { items, isLoading, searchValue, drawerItems, onAddToDrawer, onAddToFavories, activeItem, setActiveItem, onClickCategory } = React.useContext(SearchContext);
 
   return (
     <>
       <Menu
         items={['Все', 'Косметика', 'Термогружки', 'Ланч-боксы', 'Свечи', 'Бутылки']}
         onChangeMenu={(id) => alert(id)}
-        onClickCategory={(i) => setActiveItem(i)}
-        activeItem={ activeItem }
+        // onClickCategory={(i) => setActiveItem(i)} для useState, ниже RT
+        onClickCategory={onClickCategory}
+        activeItem={activeItem}
         setActiveItem={setActiveItem}
       />
       <div className="content">
@@ -42,7 +36,7 @@ function Home() {
                 // title={item.title}
                 // price={item.price}
                 // imageUrl={item.imageUrl}
-                added= {drawerItems.some((obj) => Number(obj.id) === Number(item.id))}
+                added={drawerItems.some((obj) => Number(obj.id) === Number(item.id))}
                 onFavorite={(obj) => onAddToFavories(obj)}
                 onPlus={(obj) => onAddToDrawer(obj)}
                 {...item}

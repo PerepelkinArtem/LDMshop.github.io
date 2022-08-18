@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux'
 import { decrement, increment } from './redux/slices/counterSlice.js'
+import { setActiveItem } from './redux/slices/filterSlice';
 
 import Drawer from './components/Drawer';
 import Header from './components/Header';
@@ -17,13 +18,21 @@ function App() {
   const count = useSelector((state) => state.counter.value)
   const dispatch = useDispatch()
 
+  const activeItem = useSelector((state) => state.filter.activeItem) 
+
+  const onClickCategory = (id) => {
+    console.log(id)
+    dispatch(setActiveItem(id))
+  }
+
+
   const [items, setItems] = React.useState([]);
   const [searchValue, setSearchValue] = React.useState('');
   const [drawerItems, setDrawerItems] = React.useState([]); // adding to drawer
   const [drawerOpened, setDrawerOpened] = React.useState(false);
   const [favorites, setFavorites] = useState([]); // массив для избранного
   const [isLoading, setIsLoading] = React.useState(true); // для SkeletonCard
-  const [activeItem, setActiveItem] = React.useState(0); // категории
+  // const [activeItem, setActiveItem] = React.useState(0); // категории
 
   // useEffect, чтобы рендер списка товаров был один раз, хук следит за этим.
   // Получение информации с BACKEND и помещаем в переменные items, drawersItems, favorites c помощью метоводов setItems, setDrarsItems, setFavorites:
@@ -111,7 +120,8 @@ function App() {
         </div>
       </div>
       <div className="wrapper">
-        <SearchContext.Provider value={{ items, setItems, isLoading, drawerItems, setDrawerItems, onAddToDrawer, onAddToFavories, searchValue, setSearchValue, favorites, setFavorites, activeItem, setActiveItem }}>
+        {/* <SearchContext.Provider value={{ items, setItems, isLoading, drawerItems, setDrawerItems, onAddToDrawer, onAddToFavories, searchValue, setSearchValue, favorites, setFavorites, activeItem, setActiveItem }}> */}
+        <SearchContext.Provider value={{ items, setItems, isLoading, drawerItems, setDrawerItems, onAddToDrawer, onAddToFavories, searchValue, setSearchValue, favorites, setFavorites, onClickCategory }}>
           {drawerOpened && (
             <Drawer
               items={drawerItems}
