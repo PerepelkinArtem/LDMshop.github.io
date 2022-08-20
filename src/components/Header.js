@@ -1,7 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 function Header(props) {
+const { items, totalPrice } = useSelector (state => state.drawer)
+  
   return (
     <header>
       <Link to='/'>
@@ -14,6 +17,7 @@ function Header(props) {
       </Link>
       <ul className="headerRight">
         <li>
+          <span>{items.length}</span>
           <img
             onClick={props.onClickDrawer}
             with={20}
@@ -21,7 +25,7 @@ function Header(props) {
             src="/img/basket.svg"
             alt="Basket_picture"
           />
-          <span>1205 руб.</span>
+          <span>{totalPrice} руб.</span>
           <Link to='/favorites'><img with={20} height={20} src="/img/favorite/favoriteIcon.svg" alt="Избранное" /></Link>
           <img with={20} height={20} src="/img/user.svg" alt="Пользователь" />
         </li>
