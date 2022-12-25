@@ -7,6 +7,8 @@ function Favorites() {
 
   const { favorites, onAddToFavories } = React.useContext(SearchContext);
 
+console.log(favorites)
+
   return (
     <div className="content-card">
       <h3>Избранное</h3>

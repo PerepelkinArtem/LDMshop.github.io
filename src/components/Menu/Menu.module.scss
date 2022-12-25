@@ -20,12 +20,12 @@
       }
 
       &:active {
-        background-color: darken(#f9f9f9, 5%);
+        background-color: darken(#505050, 5%);
       }
 
       &.active {
-        background-color: #505050;
-        color: #fff;
+        background-color: #444444;
+        color: rgb(224, 223, 223);
       }
     }
   }
