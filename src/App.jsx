@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Route, Routes } from "react-router-dom";
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment } from './redux/slices/counterSlice.js'
 import { setActiveItem } from './redux/slices/filterSlice';
 
 import Drawer from './components/Drawer';
@@ -15,7 +14,6 @@ import NoMatchRoute from './pages/NoMatchRoute';
 export const SearchContext = React.createContext('');
 
 function App() {
-  const count = useSelector((state) => state.counter.value)
   const dispatch = useDispatch()
 
   const activeItem = useSelector((state) => state.filter.activeItem) 
@@ -101,26 +99,7 @@ function App() {
   // };
 
   return (
-    <>
-      <div>
-        <div>
-          <button
-            aria-label="Increment value"
-            onClick={() => dispatch(increment())}
-          >
-            Increment
-          </button>
-          <span>{count}</span>
-          <button
-            aria-label="Decrement value"
-            onClick={() => dispatch(decrement())}
-          >
-            Decrement
-          </button>
-        </div>
-      </div>
       <div className="wrapper">
-        {/* <SearchContext.Provider value={{ items, setItems, isLoading, drawerItems, setDrawerItems, onAddToDrawer, onAddToFavories, searchValue, setSearchValue, favorites, setFavorites, activeItem, setActiveItem }}> */}
         <SearchContext.Provider value={{ items, setItems, isLoading, drawerItems, setDrawerItems, onAddToDrawer, onAddToFavories, searchValue, setSearchValue, favorites, setFavorites, onClickCategory }}>
           {drawerOpened && (
             <Drawer
@@ -132,14 +111,11 @@ function App() {
           <Header onClickDrawer={() => setDrawerOpened(true)} />
           <Routes>
             <Route path='/' element={<Home />} />
-
             <Route path='/favorites' element={<Favorites />} />
-
             <Route path='*' element={<NoMatchRoute />} />
           </Routes>
         </SearchContext.Provider>
       </div>
-    </>
   );
 }
 
